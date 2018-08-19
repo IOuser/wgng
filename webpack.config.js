@@ -72,7 +72,5 @@ function getTSLoader() {
 }
 
 function getWebpackPlugins() {
-    return isDev
-        ? [new webpack.HotModuleReplacementPlugin()]
-        : [];
+    return isDev ? [new webpack.HotModuleReplacementPlugin()] : [];
 }
