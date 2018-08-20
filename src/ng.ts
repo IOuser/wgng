@@ -15,6 +15,7 @@ export class WGNG implements IDestroyable {
     private _loop: ILoop = new Loop(this._tick.bind(this));
 
     private _controllers: Map<string, IController<any>> = new Map();
+    // private _eventsQueue: Set<string> = new Set();
     // private _inputEvents: string[] = [
     //     'play',
     //     'pause',
@@ -53,6 +54,7 @@ export class WGNG implements IDestroyable {
 
     public destroy(): void {
         console.info('WGNG: Destroy');
+        this._removeListeners();
         this._controllers.clear();
         this._loop.destroy();
         const { width, height } = this._canvasEl;
@@ -61,41 +63,63 @@ export class WGNG implements IDestroyable {
 
     public addController(id: string, controller: IController<any>): void {
         this._controllers.set(id, controller);
+        this._addListeners();
     }
 
     public removeController(id: string): void {
         this._controllers.delete(id);
     }
 
-    private _checkInput(_dt: number): void {
-        const firedEvents: Record<string, boolean> = {};
-        for (const controller of this._controllers.values()) {
-            if (this._loop.state() === LoopState.Running && controller.isPressed(Keys.Escape)) {
-                firedEvents.pause = true;
-            }
-
-            if (this._loop.state() === LoopState.Paused && controller.isPressed(Keys.Escape)) {
-                firedEvents.play = true;
-            }
+    private _addListeners(): void {
+        const kb = this._controllers.get('keyboard');
+        if (kb) {
+            kb.subscribe(Keys.Escape, this._toggleState);
         }
-
-        this._fireEvents(firedEvents);
     }
 
-    private _fireEvents(firedEvents: Record<string, boolean>): void {
-        if (firedEvents.pause) {
-            console.log('stop');
-            this._loop.stop();
+    private _removeListeners(): void {
+        const kb = this._controllers.get('keyboard');
+        if (kb) {
+            kb.unsubscribe(Keys.Escape, this._toggleState);
         }
+    }
 
-        if (firedEvents.play) {
-            console.log('start');
+    private _toggleState = () => {
+        if (this._loop.state() === LoopState.Running) {
+            this._loop.stop();
+        } else {
             this._loop.start();
         }
-    }
+    };
 
-    private _tick(dt: number): void {
-        this._checkInput(dt);
+    // private _checkInput(_dt: number): void {
+    //     for (const controller of this._controllers.values()) {
+    //         if (this._loop.state() === LoopState.Running && controller.isPressed(Keys.Escape)) {
+    //             this._eventsQueue.add('pause');
+    //         }
+
+    //         if (this._loop.state() === LoopState.Paused && controller.isPressed(Keys.Escape)) {
+    //             this._eventsQueue.add('play');
+    //         }
+    //     }
+    // }
+
+    // private _fireEvents(): void {
+    //     if (this._eventsQueue.has('pause')) {
+    //         // console.log('stop');
+    //         this._loop.stop();
+    //         this._eventsQueue.delete('pause');
+    //     }
+
+    //     if (this._eventsQueue.has('play')) {
+    //         // console.log('start');
+    //         this._loop.start();
+    //         this._eventsQueue.delete('play');
+    //     }
+    // }
+
+    private _tick(state: LoopState, dt: number, t: number): void {
+        // this._checkInput(dt);
 
         const ctx = this._ctx;
         const { width, height } = this._canvasEl;
@@ -108,8 +132,16 @@ export class WGNG implements IDestroyable {
 
         ctx.fillStyle = '#777';
         ctx.font = '24px monospace';
-        ctx.fillText(`${width}x${height} - ${dt.toFixed(1)}`, 5, height - 10);
+        ctx.fillText(
+            `${width}x${height} - S: ${state === LoopState.Running ? 'Running' : 'Paused'} - dt: ${dt.toFixed(
+                1,
+            )} - T: ${t}`,
+            5,
+            height - 10,
+        );
         ctx.restore();
+
+        // this._fireEvents();
     }
 }
 

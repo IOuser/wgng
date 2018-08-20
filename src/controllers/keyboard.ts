@@ -18,7 +18,7 @@ export class Keyboard extends Controller<Keys> {
     }
 
     private _downHandler = (e: KeyboardEvent) => {
-        e.preventDefault();
+        // e.preventDefault();
         this._state[e.key as Keys] = true;
         console.log(this._state);
     };
@@ -26,5 +26,13 @@ export class Keyboard extends Controller<Keys> {
     private _upHandler = (e: KeyboardEvent) => {
         this._state[e.key as Keys] = false;
         console.log(this._state);
+
+        for (const [key, set] of this._handlers) {
+            if (key !== e.key) {
+                continue;
+            }
+
+            set.forEach((handler: () => void) => handler());
+        }
     };
 }
