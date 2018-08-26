@@ -1,5 +1,4 @@
 # WGNG
-===================
 
 [![Build Status][travis-button]][travis]
 [![Coverage Status][codecov-button]][codecov]
