@@ -1,0 +1,6 @@
+{
+    "private": true,
+    "name": "quad-tree",
+    "main": "quad-tree.ts",
+    "typings": "quad-tree.ts"
+}

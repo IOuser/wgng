@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`QuadTree should match snapshot 1`] = `
+QuadTree {
+  "_boundary": AxisAlignedBoundingBox {
+    "_center": Object {
+      "x": 0,
+      "y": 0,
+    },
+    "_halfDimension": Object {
+      "x": 0.5,
+      "y": 0.5,
+    },
+  },
+  "_northEast": null,
+  "_northWest": null,
+  "_points": Array [],
+  "_southEast": null,
+  "_southWest": null,
+}
+`;
