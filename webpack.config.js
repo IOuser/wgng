@@ -48,7 +48,7 @@ module.exports = {
     },
 
     devServer: {
-        contentBase: path.join(cwd, 'dest'),
+        contentBase: path.resolve(cwd, 'dest'),
         compress: true,
         port: 4221,
         hot: isDev,

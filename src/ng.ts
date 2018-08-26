@@ -1,7 +1,11 @@
 import { IDestroyable } from 'utils/idestroyable';
 import { ILoop, Loop, LoopState } from 'loop';
-import { IController } from 'controllers/icontroller';
-import { Keys } from 'utils/keys';
+import { Pane } from 'modules/pane';
+import { Resizer } from 'modules/resizer';
+import { TDimensions } from 'modules/tdimensions';
+import { Scene } from 'modules/scene';
+// import { IController } from 'controllers/icontroller';
+// import { Keys } from 'utils/keys';
 
 export type WGNGParams = {
     canvas: HTMLCanvasElement | string;
@@ -9,12 +13,15 @@ export type WGNGParams = {
 
 export class WGNG implements IDestroyable {
     private _params: WGNGParams;
-    private _canvasEl: HTMLCanvasElement;
-    private _ctx: CanvasRenderingContext2D;
 
-    private _loop: ILoop = new Loop(this._tick.bind(this));
+    private _pane: Pane;
+    private _resizer: Resizer;
+    private _dimensions: TDimensions;
 
-    private _controllers: Map<string, IController<any>> = new Map();
+    private _mainLoop: ILoop;
+
+    private _scene: Scene;
+    // private _controllers: Map<string, IController<any>> = new Map();
     // private _eventsQueue: Set<string> = new Set();
     // private _inputEvents: string[] = [
     //     'play',
@@ -25,72 +32,63 @@ export class WGNG implements IDestroyable {
     public constructor(params: WGNGParams) {
         this._params = params;
 
-        // Prepare canvas
-        const { canvas: canvasElOrSelector } = this._params;
-        let canvasEl: HTMLCanvasElement | string | null = canvasElOrSelector;
-        if (isString(canvasElOrSelector)) {
-            canvasEl = document.querySelector<HTMLCanvasElement>(canvasElOrSelector);
-        }
+        this._pane = this._initPane();
 
-        if (!isCanvasEl(canvasEl)) {
-            throw new Error('Canvas not founded');
-        }
+        const resizer = new Resizer();
+        this._resizer = resizer;
+        this._dimensions = resizer.getDimensions();
 
-        this._canvasEl = canvasEl;
+        this._mainLoop = new Loop(this._tick.bind(this));
 
-        // Prepare context
-        const ctx = canvasEl.getContext('2d');
-        if (ctx === null) {
-            throw new Error('CTX not found');
-        }
+        this._scene = new Scene({ dimensions: this._dimensions });
 
-        this._ctx = ctx;
+        this._initSubscriptions();
     }
 
     public start(): void {
         // TODO: Create a controller
-        this._loop.start();
+        this._mainLoop.start();
     }
 
     public destroy(): void {
         console.info('WGNG: Destroy');
-        this._removeListeners();
-        this._controllers.clear();
-        this._loop.destroy();
-        const { width, height } = this._canvasEl;
-        this._ctx.clearRect(0, 0, width, height);
+        // this._removeListeners();
+        // this._controllers.clear();
+        this._mainLoop.destroy();
+        this._pane.destroy();
+        this._resizer.destroy();
     }
 
-    public addController(id: string, controller: IController<any>): void {
-        this._controllers.set(id, controller);
-        this._addListeners();
-    }
+    // public addController(id: string, controller: IController<any>): void {
+    //     this._controllers.set(id, controller);
+    //     this._addListeners();
+    // }
 
-    public removeController(id: string): void {
-        this._controllers.delete(id);
-    }
+    // public removeController(id: string): void {
+    //     this._controllers.delete(id);
+    // }
 
-    private _addListeners(): void {
-        const kb = this._controllers.get('keyboard');
-        if (kb) {
-            kb.subscribe(Keys.Escape, this._toggleState);
-        }
-    }
+    // private _addListeners(): void {
+    //     const kb = this._controllers.get('keyboard');
+    //     if (kb) {
+    //         kb.subscribe(Keys.Escape, this._toggleState);
+    //     }
+    // }
 
-    private _removeListeners(): void {
-        const kb = this._controllers.get('keyboard');
-        if (kb) {
-            kb.unsubscribe(Keys.Escape, this._toggleState);
-        }
-    }
+    // private _removeListeners(): void {
+    //     const kb = this._controllers.get('keyboard');
+    //     if (kb) {
+    //         kb.unsubscribe(Keys.Escape, this._toggleState);
+    //     }
+    // }
 
-    private _toggleState = () => {
-        if (this._loop.state() === LoopState.Running) {
-            this._loop.stop();
-        } else {
-            this._loop.start();
-        }
-    };
+    // private _toggleState = () => {
+    //     if (this._loop.state() === LoopState.Running) {
+    //         this._loop.stop();
+    //     } else {
+    //         this._loop.start();
+    //     }
+    // };
 
     // private _checkInput(_dt: number): void {
     //     for (const controller of this._controllers.values()) {
@@ -118,11 +116,26 @@ export class WGNG implements IDestroyable {
     //     }
     // }
 
+    private _initSubscriptions(): void {
+        this._resizer.getResizeHandler().subscribe(this._resize);
+    }
+
+    private _initPane(): Pane {
+        const { canvas } = this._params;
+        return new Pane(canvas);
+    }
+
+    private _resize = (dimensions: TDimensions) => {
+        this._dimensions = dimensions;
+        this._pane.setSize(dimensions);
+        this._scene.setParams({ dimensions });
+    };
+
     private _tick(state: LoopState, dt: number, t: number): void {
         // this._checkInput(dt);
 
-        const ctx = this._ctx;
-        const { width, height } = this._canvasEl;
+        const ctx = this._pane.getContext();
+        const { width, height } = this._dimensions;
         ctx.save();
         ctx.fillStyle = '#333';
         ctx.fillRect(0, 0, width, height);
@@ -141,9 +154,8 @@ export class WGNG implements IDestroyable {
         );
         ctx.restore();
 
+        this._scene.render(ctx);
+
         // this._fireEvents();
     }
 }
-
-const isString = (val: unknown): val is string => typeof val === 'string';
-const isCanvasEl = (el: unknown): el is HTMLCanvasElement => el != null && el instanceof HTMLCanvasElement;

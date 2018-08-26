@@ -20,7 +20,8 @@ node_modules
 package-lock.json
 yarn-error.log
 dist
-dest
+dest/*
+!dest/index.html
 lib
 .cache-loader
 .awcache
