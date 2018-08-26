@@ -1,4 +1,4 @@
-[WGNG][]
+# WGNG
 ===================
 
 [![Build Status][travis-button]][travis]
