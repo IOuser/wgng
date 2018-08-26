@@ -2,7 +2,7 @@ import { IDestroyable } from 'utils/idestroyable';
 import { IDelegate, Delegate } from 'utils/delegate';
 import { debounce } from 'utils/debounce';
 
-import { TDimensions } from 'modules/tdimensions';
+import { TDimensions } from 'utils/aabb/tdimensions';
 
 export class Resizer implements IDestroyable {
     private _resizeHandler: IDelegate<TDimensions> = new Delegate();

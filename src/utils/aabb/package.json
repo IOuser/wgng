@@ -1,0 +1,6 @@
+{
+    "private": true,
+    "name": "aabb",
+    "main": "aabb.ts",
+    "typings": "aabb.ts"
+}

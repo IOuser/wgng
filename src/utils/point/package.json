@@ -1,0 +1,6 @@
+{
+    "private": true,
+    "name": "point",
+    "main": "point.ts",
+    "typings": "point.ts"
+}

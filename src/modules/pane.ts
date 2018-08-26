@@ -1,6 +1,6 @@
 import { IDestroyable } from 'utils/idestroyable';
 import { isString, isCanvasEl } from 'utils/typeguards';
-import { TDimensions } from 'modules/tdimensions';
+import { TDimensions } from 'utils/aabb/tdimensions';
 
 export class Pane implements IDestroyable {
     private _canvasEl: HTMLCanvasElement;

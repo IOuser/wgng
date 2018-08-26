@@ -2,7 +2,7 @@ import { IDestroyable } from 'utils/idestroyable';
 import { ILoop, Loop, LoopState } from 'loop';
 import { Pane } from 'modules/pane';
 import { Resizer } from 'modules/resizer';
-import { TDimensions } from 'modules/tdimensions';
+import { TDimensions } from 'utils/aabb/tdimensions';
 import { Scene } from 'modules/scene';
 // import { IController } from 'controllers/icontroller';
 // import { Keys } from 'utils/keys';

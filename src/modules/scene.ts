@@ -1,5 +1,5 @@
 import { IDestroyable } from 'utils/idestroyable';
-import { TDimensions } from './tdimensions';
+import { TDimensions } from 'utils/aabb/tdimensions';
 import { QuadTree, AxisAlignedBoundingBox, XY } from 'utils/quad-tree';
 
 // x, y, w, h
