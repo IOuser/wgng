@@ -27,3 +27,4 @@ lib
 .awcache
 .vscode
 build
+coverage
