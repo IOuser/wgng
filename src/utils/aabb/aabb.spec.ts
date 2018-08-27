@@ -1,6 +1,6 @@
-import { Point } from '../point';
+import { Point } from 'utils/point';
 
-import { AABB } from './aabb';
+import { AABB, AABBPart } from './aabb';
 
 describe('AABB', () => {
     const center = new Point(1, 1);
@@ -65,6 +65,51 @@ describe('AABB', () => {
 
             const aabb10 = new AABB(new Point(3, -1), halfDimensions);
             expect(aabb.intersectsAABB(aabb10)).toBeTruthy();
+        });
+    });
+
+    describe('::subdivide', () => {
+        const aabb = new AABB(center, halfDimensions);
+
+        const dimensions = {
+            width: 1,
+            height: 1,
+        };
+
+        it('should subdivide to nw part', () => {
+            const nw = aabb.subdivide(AABBPart.NW);
+            expect(nw.fullDimensions()).toMatchObject({
+                ...dimensions,
+                x: 0,
+                y: 0,
+            });
+        });
+
+        it('should subdivide to ne part', () => {
+            const ne = aabb.subdivide(AABBPart.NE);
+            expect(ne.fullDimensions()).toMatchObject({
+                ...dimensions,
+                x: 1,
+                y: 0,
+            });
+        });
+
+        it('should subdivide to sw part', () => {
+            const sw = aabb.subdivide(AABBPart.SW);
+            expect(sw.fullDimensions()).toMatchObject({
+                ...dimensions,
+                x: 0,
+                y: 1,
+            });
+        });
+
+        it('should subdivide to se part', () => {
+            const se = aabb.subdivide(AABBPart.SE);
+            expect(se.fullDimensions()).toMatchObject({
+                ...dimensions,
+                x: 1,
+                y: 1,
+            });
         });
     });
 

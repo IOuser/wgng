@@ -1,4 +1,4 @@
-import { IPoint } from 'utils/point';
+import { IPoint, Point } from 'utils/point';
 
 import { TFullDimensions } from './tdimensions';
 
@@ -63,17 +63,17 @@ export class AABB implements IAABB {
         const { x: halfW, y: halfY } = this._halfDimension;
         const quadW = halfW / 2;
         const quadH = halfY / 2;
-        const halfDimension = { x: quadW, y: quadH };
+        const halfDimension = new Point(quadW, quadH);
 
         switch (true) {
             case part === AABBPart.NW:
-                return new AABB({ x: x - quadW, y: y - quadH }, halfDimension);
+                return new AABB(new Point(x - quadW, y - quadH), halfDimension);
             case part === AABBPart.NE:
-                return new AABB({ x: x + quadW, y: y - quadH }, halfDimension);
+                return new AABB(new Point(x + quadW, y - quadH), halfDimension);
             case part === AABBPart.SW:
-                return new AABB({ x: x - quadW, y: y + quadH }, halfDimension);
+                return new AABB(new Point(x - quadW, y + quadH), halfDimension);
             case part === AABBPart.SE:
-                return new AABB({ x: x + quadW, y: y + quadH }, halfDimension);
+                return new AABB(new Point(x + quadW, y + quadH), halfDimension);
             default:
                 throw Error('Part have incorrect value');
         }
