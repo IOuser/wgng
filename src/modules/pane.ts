@@ -1,6 +1,6 @@
 import { IDestroyable } from 'utils/idestroyable';
 import { isString, isCanvasEl } from 'utils/typeguards';
-import { TDimensions } from 'utils/aabb/tdimensions';
+import { Dimensions } from 'utils/aabb/dimensions';
 
 export class Pane implements IDestroyable {
     private _canvasEl: HTMLCanvasElement;
@@ -34,7 +34,7 @@ export class Pane implements IDestroyable {
         // this._canvasEl.remove();
     }
 
-    public setSize({ width, height }: TDimensions): void {
+    public setSize({ width, height }: Dimensions): void {
         const el = this._canvasEl;
         el.width = width;
         el.height = height;

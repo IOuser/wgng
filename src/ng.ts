@@ -2,7 +2,7 @@ import { IDestroyable } from 'utils/idestroyable';
 import { ILoop, Loop, LoopState } from 'loop';
 import { Pane } from 'modules/pane';
 import { Resizer } from 'modules/resizer';
-import { TDimensions } from 'utils/aabb/tdimensions';
+import { Dimensions } from 'utils/aabb/dimensions';
 import { Scene } from 'modules/scene';
 // import { IController } from 'controllers/icontroller';
 // import { Keys } from 'utils/keys';
@@ -16,7 +16,7 @@ export class WGNG implements IDestroyable {
 
     private _pane: Pane;
     private _resizer: Resizer;
-    private _dimensions: TDimensions;
+    private _dimensions: Dimensions;
 
     private _mainLoop: ILoop;
 
@@ -125,7 +125,7 @@ export class WGNG implements IDestroyable {
         return new Pane(canvas);
     }
 
-    private _resize = (dimensions: TDimensions) => {
+    private _resize = (dimensions: Dimensions) => {
         this._dimensions = dimensions;
         this._pane.setSize(dimensions);
         this._scene.setParams({ dimensions });

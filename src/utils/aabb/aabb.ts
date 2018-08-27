@@ -1,6 +1,6 @@
 import { IPoint, Point } from 'utils/point';
 
-import { TFullDimensions } from './tdimensions';
+import { FullDimensions } from './dimensions';
 
 export const enum AABBPart {
     NW,
@@ -14,7 +14,7 @@ export interface IAABB {
     containsPoint(point: IPoint): boolean;
     intersectsAABB(other: IAABB): boolean;
     subdivide(part: AABBPart): IAABB;
-    fullDimensions(): TFullDimensions;
+    fullDimensions(): FullDimensions;
 }
 
 export class AABB implements IAABB {
@@ -79,7 +79,7 @@ export class AABB implements IAABB {
         }
     }
 
-    public fullDimensions(): TFullDimensions {
+    public fullDimensions(): FullDimensions {
         const { x, y } = this._center;
         const { x: halfW, y: halfY } = this._halfDimension;
         return {

@@ -2,20 +2,234 @@
 
 exports[`QuadTree should match snapshot 1`] = `
 QuadTree {
-  "_boundary": AxisAlignedBoundingBox {
-    "_center": Object {
-      "x": 0,
-      "y": 0,
+  "_boundary": AABB {
+    "_center": Point {
+      "x": 1,
+      "y": 1,
     },
-    "_halfDimension": Object {
-      "x": 0.5,
-      "y": 0.5,
+    "_halfDimension": Point {
+      "x": 1,
+      "y": 1,
     },
   },
-  "_northEast": null,
-  "_northWest": null,
+  "_northEast": QuadTree {
+    "_boundary": AABB {
+      "_center": Point {
+        "x": 1.5,
+        "y": 0.5,
+      },
+      "_halfDimension": Point {
+        "x": 0.5,
+        "y": 0.5,
+      },
+    },
+    "_northEast": null,
+    "_northWest": null,
+    "_points": Array [],
+    "_southEast": null,
+    "_southWest": null,
+  },
+  "_northWest": QuadTree {
+    "_boundary": AABB {
+      "_center": Point {
+        "x": 0.5,
+        "y": 0.5,
+      },
+      "_halfDimension": Point {
+        "x": 0.5,
+        "y": 0.5,
+      },
+    },
+    "_northEast": QuadTree {
+      "_boundary": AABB {
+        "_center": Point {
+          "x": 0.75,
+          "y": 0.25,
+        },
+        "_halfDimension": Point {
+          "x": 0.25,
+          "y": 0.25,
+        },
+      },
+      "_northEast": null,
+      "_northWest": null,
+      "_points": Array [],
+      "_southEast": null,
+      "_southWest": null,
+    },
+    "_northWest": QuadTree {
+      "_boundary": AABB {
+        "_center": Point {
+          "x": 0.25,
+          "y": 0.25,
+        },
+        "_halfDimension": Point {
+          "x": 0.25,
+          "y": 0.25,
+        },
+      },
+      "_northEast": QuadTree {
+        "_boundary": AABB {
+          "_center": Point {
+            "x": 0.375,
+            "y": 0.125,
+          },
+          "_halfDimension": Point {
+            "x": 0.125,
+            "y": 0.125,
+          },
+        },
+        "_northEast": null,
+        "_northWest": null,
+        "_points": Array [],
+        "_southEast": null,
+        "_southWest": null,
+      },
+      "_northWest": QuadTree {
+        "_boundary": AABB {
+          "_center": Point {
+            "x": 0.125,
+            "y": 0.125,
+          },
+          "_halfDimension": Point {
+            "x": 0.125,
+            "y": 0.125,
+          },
+        },
+        "_northEast": null,
+        "_northWest": null,
+        "_points": Array [
+          Point {
+            "x": 0.25,
+            "y": 0.1,
+          },
+          Point {
+            "x": 0.25,
+            "y": 0.2,
+          },
+        ],
+        "_southEast": null,
+        "_southWest": null,
+      },
+      "_points": Array [],
+      "_southEast": QuadTree {
+        "_boundary": AABB {
+          "_center": Point {
+            "x": 0.375,
+            "y": 0.375,
+          },
+          "_halfDimension": Point {
+            "x": 0.125,
+            "y": 0.125,
+          },
+        },
+        "_northEast": null,
+        "_northWest": null,
+        "_points": Array [],
+        "_southEast": null,
+        "_southWest": null,
+      },
+      "_southWest": QuadTree {
+        "_boundary": AABB {
+          "_center": Point {
+            "x": 0.125,
+            "y": 0.375,
+          },
+          "_halfDimension": Point {
+            "x": 0.125,
+            "y": 0.125,
+          },
+        },
+        "_northEast": null,
+        "_northWest": null,
+        "_points": Array [
+          Point {
+            "x": 0.25,
+            "y": 0.3,
+          },
+          Point {
+            "x": 0.25,
+            "y": 0.4,
+          },
+          Point {
+            "x": 0.25,
+            "y": 0.5,
+          },
+        ],
+        "_southEast": null,
+        "_southWest": null,
+      },
+    },
+    "_points": Array [],
+    "_southEast": QuadTree {
+      "_boundary": AABB {
+        "_center": Point {
+          "x": 0.75,
+          "y": 0.75,
+        },
+        "_halfDimension": Point {
+          "x": 0.25,
+          "y": 0.25,
+        },
+      },
+      "_northEast": null,
+      "_northWest": null,
+      "_points": Array [],
+      "_southEast": null,
+      "_southWest": null,
+    },
+    "_southWest": QuadTree {
+      "_boundary": AABB {
+        "_center": Point {
+          "x": 0.25,
+          "y": 0.75,
+        },
+        "_halfDimension": Point {
+          "x": 0.25,
+          "y": 0.25,
+        },
+      },
+      "_northEast": null,
+      "_northWest": null,
+      "_points": Array [],
+      "_southEast": null,
+      "_southWest": null,
+    },
+  },
   "_points": Array [],
-  "_southEast": null,
-  "_southWest": null,
+  "_southEast": QuadTree {
+    "_boundary": AABB {
+      "_center": Point {
+        "x": 1.5,
+        "y": 1.5,
+      },
+      "_halfDimension": Point {
+        "x": 0.5,
+        "y": 0.5,
+      },
+    },
+    "_northEast": null,
+    "_northWest": null,
+    "_points": Array [],
+    "_southEast": null,
+    "_southWest": null,
+  },
+  "_southWest": QuadTree {
+    "_boundary": AABB {
+      "_center": Point {
+        "x": 0.5,
+        "y": 1.5,
+      },
+      "_halfDimension": Point {
+        "x": 0.5,
+        "y": 0.5,
+      },
+    },
+    "_northEast": null,
+    "_northWest": null,
+    "_points": Array [],
+    "_southEast": null,
+    "_southWest": null,
+  },
 }
 `;

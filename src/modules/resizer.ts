@@ -2,12 +2,12 @@ import { IDestroyable } from 'utils/idestroyable';
 import { IDelegate, Delegate } from 'utils/delegate';
 import { debounce } from 'utils/debounce';
 
-import { TDimensions } from 'utils/aabb/tdimensions';
+import { Dimensions } from 'utils/aabb/dimensions';
 
 export class Resizer implements IDestroyable {
-    private _resizeHandler: IDelegate<TDimensions> = new Delegate();
+    private _resizeHandler: IDelegate<Dimensions> = new Delegate();
     private _onResizeDebounced: () => void = debounce(this._onResize.bind(this), 100);
-    private _dimensions: TDimensions = this._getDimensions();
+    private _dimensions: Dimensions = this._getDimensions();
 
     public constructor() {
         this._addListeners();
@@ -18,11 +18,11 @@ export class Resizer implements IDestroyable {
         this._resizeHandler.destroy();
     }
 
-    public getResizeHandler(): IDelegate<TDimensions> {
+    public getResizeHandler(): IDelegate<Dimensions> {
         return this._resizeHandler;
     }
 
-    public getDimensions(): TDimensions {
+    public getDimensions(): Dimensions {
         return this._dimensions;
     }
 
@@ -40,7 +40,7 @@ export class Resizer implements IDestroyable {
         this._resizeHandler.fire(dimensions);
     }
 
-    private _getDimensions(): TDimensions {
+    private _getDimensions(): Dimensions {
         return {
             width: window.innerWidth,
             height: window.innerHeight,

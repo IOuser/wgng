@@ -1,12 +1,14 @@
 import { IDestroyable } from 'utils/idestroyable';
-import { TDimensions } from 'utils/aabb/tdimensions';
-import { QuadTree, AxisAlignedBoundingBox, XY } from 'utils/quad-tree';
+import { Dimensions } from 'utils/aabb/dimensions';
+import { QuadTree } from 'utils/quad-tree';
+import { IPoint, Point } from 'utils/point/point';
+import { AABB } from 'utils/aabb/aabb';
 
 // x, y, w, h
 export type TViewport = [number, number, number, number];
 
 export type SceneParams = {
-    dimensions: TDimensions;
+    dimensions: Dimensions;
 };
 
 export class Scene implements IDestroyable {
@@ -16,7 +18,7 @@ export class Scene implements IDestroyable {
     private _viewport: TViewport;
     // private _entities: any[] = [];
 
-    private _entities: XY[] = [];
+    private _entities: IPoint[] = [];
     private _updateTree: QuadTree;
 
     public constructor(params: SceneParams) {
@@ -46,29 +48,29 @@ export class Scene implements IDestroyable {
 
         ctx.save();
 
-        ctx.save();
-        ctx.fillStyle = 'white';
-        for (const e of this._entities) {
-            ctx.fillRect(e.x, e.y, 1, 1);
-        }
-        ctx.restore();
-
         const [x, y, w, h] = this._viewport;
 
         ctx.save();
-        ctx.fillStyle = 'blue';
-        const ra = this._updateTree.queryRange(
-            new AxisAlignedBoundingBox({ x: x + w / 2, y: y + h / 2 }, { x: w / 2, y: h / 2 }),
-        );
-        for (const e of ra) {
-            ctx.fillRect(e.x - 2, e.y - 2, 4, 4);
+        ctx.fillStyle = '#f3f';
+        const or = this._updateTree.outerRange(new AABB(new Point(x + w / 2, y + h / 2), new Point(w / 2, h / 2)));
+        for (const e of or) {
+            // ctx.fillRect(Math.round(e.x), Math.round(e.y), 1, 1);
+            ctx.fillRect(Math.round(e.x - 1), Math.round(e.y - 1), 2, 2);
         }
         ctx.restore();
 
-        ctx.strokeStyle = 'rgba(255, 0, 0, 0.2)';
+        ctx.save();
+        ctx.fillStyle = '#ff3';
+        const qr = this._updateTree.queryRange(new AABB(new Point(x + w / 2, y + h / 2), new Point(w / 2, h / 2)));
+        for (const e of qr) {
+            ctx.fillRect(Math.round(e.x - 1), Math.round(e.y - 1), 2, 2);
+        }
+        ctx.restore();
+
+        ctx.strokeStyle = 'rgba(255, 0, 0, 0.5)';
         ctx.lineWidth = 1;
         ctx.strokeRect(...this._viewport);
-        ctx.strokeStyle = 'rgba(0, 255, 0, 0.1)';
+        ctx.strokeStyle = 'rgba(0, 255, 0, 0.25)';
         this._updateTree.renderNodes(ctx);
 
         ctx.restore();
@@ -94,7 +96,7 @@ export class Scene implements IDestroyable {
         const {
             dimensions: { width, height },
         } = this._params;
-        const aabb = new AxisAlignedBoundingBox({ x: width / 2, y: height / 2 }, { x: width / 2, y: height / 2 });
+        const aabb = new AABB(new Point(width / 2, height / 2), new Point(width / 2, height / 2));
         return new QuadTree(aabb);
     }
 
@@ -105,11 +107,11 @@ export class Scene implements IDestroyable {
     }
 
     private _generateEntities(): void {
-        for (let i = 0; i < 10000; i++) {
+        for (let i = 0; i < 5000; i++) {
             const x = r(0, this._params.dimensions.width);
             const y = r(0, this._params.dimensions.height);
 
-            this._entities.push({ x, y });
+            this._entities.push(new Point(x, y));
         }
 
         this._insertEntitiesToUpdateTree();
